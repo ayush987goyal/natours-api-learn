@@ -33,6 +33,10 @@ const url = require('url');
 
 //////////////////////////////////////////
 ////////// SERVER
+
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const dataObj = JSON.parse(data);
+
 const server = http.createServer((req, res) => {
   console.log(req.url);
 
@@ -42,8 +46,19 @@ const server = http.createServer((req, res) => {
     case '/':
     case '/overview':
       res.end('This is the overview');
+      break;
+
     case '/product':
       res.end('This is the PRODUCT');
+      break;
+
+    case '/api':
+      res.writeHead(200, {
+        'Content-type': 'application/json'
+      });
+      res.end(data);
+      break;
+
     default:
       res.writeHead(404, {
         'Content-ype': 'text/html',
