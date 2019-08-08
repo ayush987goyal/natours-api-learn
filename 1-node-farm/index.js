@@ -68,7 +68,7 @@ const replaceTemplate = (template, product) => {
 };
 
 const server = http.createServer((req, res) => {
-  const pathname = req.url;
+  const { query, pathname } = url.parse(req.url, true);
 
   switch (pathname) {
     case '/':
@@ -78,21 +78,22 @@ const server = http.createServer((req, res) => {
         .join('');
       const output = tempOverview.replace(/{%PRODUCT_CARDS%}/g, cardsHtml);
 
-      res.writeHead(200, {
-        'Content-type': 'text/html'
-      });
+      res.writeHead(200, { 'Content-type': 'text/html' });
       res.end(output);
       break;
     }
 
-    case '/product':
-      res.end('This is the PRODUCT');
+    case '/product': {
+      const product = dataObj[query.id];
+      const output = replaceTemplate(temProduct, product);
+
+      res.writeHead(200, { 'Content-type': 'text/html' });
+      res.end(output);
       break;
+    }
 
     case '/api':
-      res.writeHead(200, {
-        'Content-type': 'application/json'
-      });
+      res.writeHead(200, { 'Content-type': 'application/json' });
       res.end(data);
       break;
 
