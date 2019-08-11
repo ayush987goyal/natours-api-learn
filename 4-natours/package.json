@@ -4,7 +4,7 @@
   "description": "Learning",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "Ayush Goyal",
