@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 require('dotenv').config({ path: './config.env' });
 const mongoose = require('mongoose');
 
@@ -15,6 +17,7 @@ const DB = process.env.DB_URL.replace('<PASSWORD>', process.env.DB_PASSWORD);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
   })
