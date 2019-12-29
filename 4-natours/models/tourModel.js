@@ -99,6 +99,12 @@ const toursSchema = new mongoose.Schema(
         description: String,
         day: Number
       }
+    ],
+    guides: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User'
+      }
     ]
   },
   {
@@ -117,7 +123,11 @@ toursSchema.pre('save', function(next) {
   next();
 });
 
-// toursSchema.post('save', function(docs, next) {
+// For embedding (not required here)
+// toursSchema.pre('save', async function(next) {
+//   const guidesPromises = this.guides.map(async id => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+
 //   next();
 // });
 
@@ -126,6 +136,15 @@ toursSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
 
   this.start = Date.now();
+  next();
+});
+
+toursSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
+  });
+
   next();
 });
 
